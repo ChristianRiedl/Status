@@ -65,7 +65,7 @@ loggerServices.push(new LoggerService("Identity", identityLoggerRest, loggerDefa
 
 const birdAppRest = new Rest("https://www.christian-riedl.com/birdapp/", dummyOauth.mode, dummyOauth, loggerDefault, logRestError);
 
-const healthRest = new Rest("https://healthcheckmonitor-hzbybre6chgrepby.westeurope-01.azurewebsites.net/api/", "cors", dummyOauth, loggerDefault);
+const healthRest = new Rest("add this key in authorizer", "cors", dummyOauth, loggerDefault);
 const healthCheck = new HealthCheck(healthRest, "add this key in authorizer");
 
 // Create vue App
