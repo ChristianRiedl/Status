@@ -6,6 +6,7 @@
         "http-BM06-BMWebApp": "https://bm06.bmwien.org",
         "http-BM15-BMWebApp": "https://bm15.bmwien.org",
         "http-RIC-BMWebApp": "https://ric.bmwien.org",
+        "http-RIC-Admin": "https://www.christian-riedl.com",
         "http-OOE-Pi": "https://www.pitunnel.com/devices",
         "http-RIC-Photos": "https://www.christian-riedl.com/photos/speedtest",
         "http-RIC-PWA": "https://www.christian-riedl.com/nextpwa",

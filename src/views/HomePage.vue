@@ -76,6 +76,10 @@
             authenticated.value = true;
             onStartFake();
         }
+        else if (location.search && location.search.includes('health')) {
+            authenticated.value = true;
+            showHealth();
+        }
         else {
             if (authorize.password) {
                 const auth = await authorize.login(authorize.user, authorize.password);
