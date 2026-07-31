@@ -307,16 +307,16 @@
         <as-text v-else :values="values"></as-text>
         <v-row>
             <v-col cols="2">
-                <v-btn size="large" :disabled="pwaDisabled" @click="goto('https://www.christian-riedl/nextpwa/')">NEXTPWA</v-btn>
+                <v-btn size="large" :disabled="pwaDisabled" @click="goto('https://www.christian-riedl.com/nextpwa/')">NEXTPWA</v-btn>
             </v-col>
             <v-col cols="2">
-                <v-btn size="large" :disabled="photosDisabled" @click="goto('https://www.christian-riedl/photos/speedtest')">PHOTOS</v-btn>
+                <v-btn size="large" :disabled="photosDisabled" @click="goto('https://www.christian-riedl.com/photos/speedtest')">PHOTOS</v-btn>
             </v-col>
             <v-col cols="2">
-                <v-btn size="large" :disabled="identityDisabled" @click="goto('https://www.christian-riedl/identity4/')">IDENTITY</v-btn>
+                <v-btn size="large" :disabled="identityDisabled" @click="goto('https://www.christian-riedl.com/identity4/')">IDENTITY</v-btn>
             </v-col>
             <v-col cols="2">
-                <v-btn size="large" :disabled="!birdAppStatus" @click="goto('https://www.christian-riedl/birdapp/')">BIRD-APP</v-btn>
+                <v-btn size="large" :disabled="!birdAppStatus" @click="goto('https://www.christian-riedl.com/birdapp/')">BIRD-APP</v-btn>
             </v-col>
             <v-col cols="2">
                 <v-btn v-if="asHealthCheck" size="large" @click="backFromHealth">BACK</v-btn>
