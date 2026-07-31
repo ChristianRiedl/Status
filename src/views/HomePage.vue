@@ -24,6 +24,7 @@
     const getLoggerServices = inject(getLoggerServicesSymbol)!;
     const loggerServices = getLoggerServices();
     const birdAppRest = inject("birdAppRest")! as IRest;
+    const identityRest = inject("identityRest") as IRest | undefined;
     const healthCheck = inject("healthCheck")! as IHealthCheck;
     const logger = smarthomeService.logger;
     const email = ref(authorize.user);
@@ -132,6 +133,15 @@
         const res = await birdAppRest.getData<any>('status');
         if (res && res.ok && res.result)
             birdAppStatus.value = true;
+
+        if (identityRest) {
+            const identityRes = await identityRest.getData<any>('.well-known/openid-configuration');
+            const identityStatus = !!(identityRes && identityRes.ok && identityRes.result);
+            loggerStatus["Identity"] = identityStatus;
+            logger.info(`LOGGER Identify : ${identityStatus}`);
+            identityDisabled.value = !identityStatus;
+        }
+
         showValues();
     }
     async function onStartFake()
@@ -297,16 +307,16 @@
         <as-text v-else :values="values"></as-text>
         <v-row>
             <v-col cols="2">
-                <v-btn size="large" :disabled="pwaDisabled" @click="goto('/nextpwa/')">NEXTPWA</v-btn>
+                <v-btn size="large" :disabled="pwaDisabled" @click="goto('https://www.christian-riedl/nextpwa/')">NEXTPWA</v-btn>
             </v-col>
             <v-col cols="2">
-                <v-btn size="large" :disabled="photosDisabled" @click="goto('/photos/speedtest')">PHOTOS</v-btn>
+                <v-btn size="large" :disabled="photosDisabled" @click="goto('https://www.christian-riedl/photos/speedtest')">PHOTOS</v-btn>
             </v-col>
             <v-col cols="2">
-                <v-btn size="large" :disabled="identityDisabled" @click="goto('/identity4/')">IDENTITY</v-btn>
+                <v-btn size="large" :disabled="identityDisabled" @click="goto('https://www.christian-riedl/identity4/')">IDENTITY</v-btn>
             </v-col>
             <v-col cols="2">
-                <v-btn size="large" :disabled="!birdAppStatus" @click="goto('/birdapp/')">BIRD-APP</v-btn>
+                <v-btn size="large" :disabled="!birdAppStatus" @click="goto('https://www.christian-riedl/birdapp/')">BIRD-APP</v-btn>
             </v-col>
             <v-col cols="2">
                 <v-btn v-if="asHealthCheck" size="large" @click="backFromHealth">BACK</v-btn>

@@ -30,16 +30,16 @@ export class Logger implements ILogger {
         this.countEnabled++;
         switch (severity) {
           case LogLevel.Trace:
-            console.trace(`TRACE: ${msg}`);
+            console.log(`TRACE: ${msg}`);
             break;
           case LogLevel.Information:
-            console.info(`INFO : ${msg}`);
+            console.log(`INFO : ${msg}`);
             break;
           case LogLevel.Warning:
-            console.warn(`WARN : ${msg}`);
+            console.log(`WARN : ${msg}`);
             break;
           case LogLevel.Error:
-            console.error(`ERROR: ${msg}`);
+            console.log(`ERROR: ${msg}`);
             break;
         }
       }

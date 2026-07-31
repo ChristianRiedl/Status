@@ -91,19 +91,19 @@
           </g>
           <g>
               <rect x="430" y="270" width="240" height="30" class="bgservice blueborder" @click="goto('/identity4/')" :class="{ bgservicebad: props.values['LOGGER.Identity'] != 'true'}" />
-              <text class="textbold colorblack" x="440" y="290" @click="goto('/identity4/')">Identity-Service</text>
+              <text class="textbold colorblack" x="440" y="290" @click="goto('https://www.christian-riedl/identity4/')">Identity-Service</text>
           </g>
           <g>
               <rect x="430" y="310" width="90" height="30" class="bgservice blueborder" @click="goto('/photos/speedtest')" :class="{ bgservicebad: props.values['LOGGER.PhotoServer'] != 'true'}" />
-              <text class="textbold colorblack" x="440" y="330" @click="goto('/photos/speedtest')">Foto-Service</text>
+              <text class="textbold colorblack" x="440" y="330" @click="goto('https://www.christian-riedl/photos/speedtest')">Foto-Service</text>
           </g>
           <g>
               <rect x="530" y="310" width="80" height="30" class="bgservice blueborder" @click="goto('/nextpwa/')" :class="{ bgservicebad: props.values['LOGGER.PWAServer'] != 'true'}" />
-              <text class="textbold colorblack" x="535" y="330" @click="goto('/nextpwa/')">UI-Service</text>
+              <text class="textbold colorblack" x="535" y="330" @click="goto('https://www.christian-riedl/nextpwa/')">UI-Service</text>
           </g>
           <g>
               <rect x="620" y="310" width="50" height="30" class="bgservice blueborder" @click="goto('/birdapp/')" :class="{ bgservicebad: props.values['BIRDAPP'] != 'true'}" />
-              <text class="textbold colorblack" x="625" y="330" @click="goto('/birdapp/')">BIRDS</text>
+              <text class="textbold colorblack" x="625" y="330" @click="goto('https://www.christian-riedl/birdapp/')">BIRDS</text>
           </g>
       </g>
       <g>

@@ -59,7 +59,8 @@ loggerServices.push(new LoggerService("SmartHome", smartHomeLoggerRest, loggerDe
 loggerServices.push(new LoggerService("Media", mediaLoggerRest, loggerDefault, false, "MediaCore"));
 loggerServices.push(new LoggerService("PWAServer", pwaLoggerRest, loggerDefault, false));
 loggerServices.push(new LoggerService("PhotoServer", photosLoggerRest, loggerDefault, false));
-loggerServices.push(new LoggerService("Identity", identityLoggerRest, loggerDefault, false, "IdentityDuende"));
+if (mode == 'same-origin')
+    loggerServices.push(new LoggerService("Identity", identityLoggerRest, loggerDefault, false, "IdentityDuende"));
 
 const birdAppRest = new Rest("https://www.christian-riedl.com/birdapp/", mode, dummyOauth, loggerDefault, logRestError);
 
@@ -80,6 +81,10 @@ app.provide(getMediaBinSymbol, () => mediaService);
 app.provide(getLoggerServicesSymbol, () => loggerServices);
 
 app.provide("birdAppRest", birdAppRest);
+if (mode == 'cors') {
+    const identityRest = new Rest("https://www.christian-riedl.com/identity4/", mode, dummyOauth, loggerDefault, logRestError);
+    app.provide("identityRest", identityRest);
+}
 app.provide("healthCheck", healthCheck);
 
 app.config.errorHandler = (err, instance, info) => {
