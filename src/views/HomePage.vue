@@ -31,7 +31,7 @@
     const result = ref("");
     const showpwd = ref(false);
     const fake = location.hostname == 'localhost';;
-    const authenticated = ref(fake || (!!authorize.secretSmarthome && !!authorize.secretMedia));
+    const authenticated = ref(false);
     const pwaDisabled = ref(true);
     const photosDisabled = ref(true);
     const identityDisabled = ref(true);
@@ -70,13 +70,25 @@
         { deviceName: "FritzBox", sensorName: "FritzSwitch_4", valueNames: ["Power" ] },
     ];
 
-    onMounted (() => {
+    onMounted (async () => {
         if (fake) {
             authenticated.value = true;
             onStartFake();
         }
-        else if (authenticated.value) 
-            onStart()
+        else {
+            if (authorize.password) {
+                const auth = await authorize.login(authorize.user, authorize.password);
+                if (auth && auth.smarthomeSecret && auth.mediaSecret && auth.scopes) {
+                    logger.info(`Authorization initialized with scopes ${auth.scopes}`);
+                    authenticated.value = true;
+                    onStart();
+                }
+                else if (authorize.lastStatus != 401 && authorize.lastStatus != 200) {
+                    authenticated.value = true;
+                    onStartOffline();
+                }
+            }
+        }
     });
 
     async function onStart()
@@ -160,6 +172,43 @@
         birdAppStatus.value = true;
         showValues();
     }
+    function onStartOffline() {
+        mediaStatus["ROON-SOUNDBAR"] = false;
+        smartHomeValues.push({
+            On: "False", TotalCPU: "0", TotalMemory: "0", Info: "OFFLINE ", Fans: "",
+            Temperatures: "", DriveTemperatures: ""
+        });
+        smartHomeValues.push({
+            On: "False", TotalCPU: "0", TotalMemory: "0", ErrorCount: "0", Info: "UNKNOWN", LogFilesSize: "0", DriveTemperatures: ""
+        });
+        smartHomeValues.push({ On: "False", TotalCPU: "", TotalMemory: "0" });
+        smartHomeValues.push({ On: "False", TotalCPU: "0", TotalMemory: "0" });
+        smartHomeValues.push({ OK: "False" });
+        smartHomeValues.push({ OK: "False" });
+        smartHomeValues.push({ OK: "False" });
+        smartHomeValues.push({ OK: "False" });
+        smartHomeValues.push({ On: "False" });
+        smartHomeValues.push({ On: "False" });
+        smartHomeValues.push({ On: "False" });
+        smartHomeValues.push({ On: "False" });
+        smartHomeValues.push({ AtHome: "False" });
+        smartHomeValues.push({ AtHome: "False" });
+        smartHomeValues.push({ Automatik: "False", AlarmDelayed: "False" });
+        smartHomeValues.push({ Temperature: "0" });
+        smartHomeValues.push({ Temperature: "0" });
+        smartHomeValues.push({ Temperature: "0" });
+        smartHomeValues.push({ Temperature: "0" });
+        smartHomeValues.push({ Power: "0" });
+        smartHomeValues.push({ Power: "0" });
+        smartHomeValues.push({ Power: "0" });
+        loggerStatus["SmartHome"] = false;
+        loggerStatus["Media"] = false;
+        loggerStatus["PWAServer"] = false;
+        loggerStatus["PhotoServer"] = false;
+        loggerStatus["Identity"] = false;
+        birdAppStatus.value = false;
+        showValues();
+    }
     function showValues ()
     {
         for (var key in mediaStatus) {
@@ -201,7 +250,6 @@
     async function onLogin() {
         try {
             const res = await authorize.authorize(email.value, password.value);
-
             if (res.mediaSecret && res.smarthomeSecret && res.scopes) {
                 // Write only to storage because app has to reload
                 result.value = "Everything OK, restart the app or go back and refresh browser";

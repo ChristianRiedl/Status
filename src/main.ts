@@ -16,37 +16,35 @@ const accessTokenUrl = "https://www.christian-riedl.com/identity4/connect/token"
 const smartHomeUrl = "https://www.christian-riedl.com/smarthome/";
 const mediaUrl = "https://www.christian-riedl.com/media/";
 const storage = new LocalStorage('admin');
-const appConfig = new AppConfig(storage);
 const loggerDefault = new Logger('default', LogLevel.Trace);
+const logRestError = true;
+const appConfig = new AppConfig(storage);
 const appState = new AppState(loggerDefault);
 const browser = appState.setBrowser(window);
-const logRestError = true;
 const statistics = new Statistics();
 
-// Initilize
+// Initialize
 const allScopes: EScope = EScope.Stock * 2 - 1;
 appConfig.add("user", "User Mail Address", '', true, allScopes);
 appConfig.add("name", "User Name", 'Christian', true, allScopes);
 appConfig.add("user", "User Mail Address", '', true, allScopes);
 appConfig.load();
 
+let mode: RequestMode = location.hostname == "www.christian-riedl.com" ? "same-origin" : "cors";
+
 // Authorize
-const authorize = new Authorize(smartHomeUrl, storage, appConfig, appState, loggerDefault);
-if (authorize.password) {
-    authorize.login(authorize.user, authorize.password)
-    .then((res) => loggerDefault.info(`Authorization initialized with scopes 0x${appState.scopes.toString(16)}`))
-}
+const authorize = new Authorize(smartHomeUrl, storage, appConfig, appState, mode, loggerDefault);
 
 // Smarthome API
 const smartHomeDb = new SmartHomeDb(loggerDefault, root + "_sensors");
-const smartHomeOauth = new OAuth(accessTokenUrl, "same-origin", storage, loggerDefault, "smarthome", "smarthome_service", authorize.secretSmarthome);
-const smartHomeRest = new Rest(smartHomeUrl, "same-origin", smartHomeOauth, loggerDefault, logRestError);
+const smartHomeOauth = new OAuth(accessTokenUrl, mode, storage, loggerDefault, "smarthome", "smarthome_service", authorize.secretSmarthome);
+const smartHomeRest = new Rest(smartHomeUrl, mode, smartHomeOauth, loggerDefault, logRestError);
 const smartHomeService = new SmartHomeService(smartHomeRest, smartHomeDb, statistics, 10000, false, false, false, false, 0, loggerDefault);
 
 // Media API
 const mediaStorage = new LocalStorage(root + "_media");   // Collision with smarthome oauth !!!!
-const mediaOAuth = new OAuth(accessTokenUrl, 'same-origin', mediaStorage, loggerDefault, "media", "media_service", authorize.secretMedia);
-const mediaRest = new Rest(mediaUrl, "same-origin", mediaOAuth, loggerDefault, logRestError);
+const mediaOAuth = new OAuth(accessTokenUrl, mode, mediaStorage, loggerDefault, "media", "media_service", authorize.secretMedia);
+const mediaRest = new Rest(mediaUrl, mode, mediaOAuth, loggerDefault, logRestError);
 const mediaService = new MediaServiceBin(mediaRest, appConfig.user, statistics, false, 0, loggerDefault);
 
 // LoggerService
@@ -65,8 +63,8 @@ loggerServices.push(new LoggerService("Identity", identityLoggerRest, loggerDefa
 
 const birdAppRest = new Rest("https://www.christian-riedl.com/birdapp/", dummyOauth.mode, dummyOauth, loggerDefault, logRestError);
 
-const healthRest = new Rest("add this key in authorizer", "cors", dummyOauth, loggerDefault);
-const healthCheck = new HealthCheck(healthRest, "add this key in authorizer");
+const healthRest = new Rest(authorize.healthCheckUrl, "cors", dummyOauth, loggerDefault);
+const healthCheck = new HealthCheck(healthRest, authorize.healthCheckKey);
 
 // Create vue App
 const app = createApp(App);
