@@ -52,16 +52,16 @@ const loggerServices: ILoggerService[] = [];
 const dummyOauth = new DummyOAuth();
 const smartHomeLoggerRest = new Rest(smartHomeUrl + "apilogger/", smartHomeOauth.mode, smartHomeOauth, loggerDefault, logRestError);
 const mediaLoggerRest = new Rest(mediaUrl + "apilogger/", mediaOAuth.mode, mediaOAuth, loggerDefault, logRestError);
-const pwaLoggerRest = new Rest("https://www.christian-riedl.com/nextpwa/apilogger/", dummyOauth.mode, dummyOauth, loggerDefault, logRestError);
-const photosLoggerRest = new Rest("https://www.christian-riedl.com/photos/apilogger/", dummyOauth.mode, dummyOauth, loggerDefault, logRestError);
-const identityLoggerRest = new Rest("https://www.christian-riedl.com/identity4/apilogger/", dummyOauth.mode, dummyOauth, loggerDefault, logRestError);
+const pwaLoggerRest = new Rest("https://www.christian-riedl.com/nextpwa/apilogger/", mode, dummyOauth, loggerDefault, logRestError);
+const photosLoggerRest = new Rest("https://www.christian-riedl.com/photos/apilogger/", mode, dummyOauth, loggerDefault, logRestError);
+const identityLoggerRest = new Rest("https://www.christian-riedl.com/identity4/apilogger/", mode, dummyOauth, loggerDefault, logRestError);
 loggerServices.push(new LoggerService("SmartHome", smartHomeLoggerRest, loggerDefault, false, "SmartHomeCore"));
 loggerServices.push(new LoggerService("Media", mediaLoggerRest, loggerDefault, false, "MediaCore"));
 loggerServices.push(new LoggerService("PWAServer", pwaLoggerRest, loggerDefault, false));
 loggerServices.push(new LoggerService("PhotoServer", photosLoggerRest, loggerDefault, false));
 loggerServices.push(new LoggerService("Identity", identityLoggerRest, loggerDefault, false, "IdentityDuende"));
 
-const birdAppRest = new Rest("https://www.christian-riedl.com/birdapp/", dummyOauth.mode, dummyOauth, loggerDefault, logRestError);
+const birdAppRest = new Rest("https://www.christian-riedl.com/birdapp/", mode, dummyOauth, loggerDefault, logRestError);
 
 const healthRest = new Rest(authorize.healthCheckUrl, "cors", dummyOauth, loggerDefault);
 const healthCheck = new HealthCheck(healthRest, authorize.healthCheckKey);
